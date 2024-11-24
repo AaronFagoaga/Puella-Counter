@@ -175,12 +175,6 @@ end//
 delimiter ;
 
 
-
-
-
-
-
-
 -- procesos almacenados: tabla empresas
 -- Insertar una nueva empresa
 DELIMITER //
@@ -275,6 +269,7 @@ begin
 end//
 delimiter ;
 
+delimiter //
 create procedure sp_get_buy_recipt_by_id(
     in p_id_buy_recipt int
 )
@@ -324,7 +319,7 @@ end //
 delimiter ;
 
 
---registros de prueba para cada tabla
+-- registros de prueba para cada tabla
 insert into tbl_rol (rol_name, rol_info) values 
 ('admin', 'administrador del sistema'),
 ('manager', 'gestor de operaciones'),
