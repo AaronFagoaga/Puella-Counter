@@ -55,50 +55,64 @@ create table tbl_sell_recipt( -- tabla para almacenar los recibos de venta
 );
 
 
+
+
+
 -- procesos almacenados: tabla roles
+-- Insertar un nuevo rol
 delimiter //
-create procedure sp_insert_rol(p_rol_name varchar(50), p_rol_info varchar(255)) -- insertar un rol
+create procedure sp_insert_rol(
+    p_rol_name varchar(50), 
+    p_rol_info varchar(255))
 begin
-    insert into tbl_rol(rol_name, rol_info) values (p_rol_name, p_rol_info);
+    insert into tbl_rol(rol_name, rol_info) 
+    values (p_rol_name, p_rol_info);
 end//
 delimiter ;
 
+-- Actualizar un rol existente
 delimiter //
-create procedure sp_update_rol(p_id_rol int, p_rol_name varchar(50), p_rol_info varchar(255)) -- actualizar un rol
+create procedure sp_update_rol(
+    p_id_rol int,
+    p_rol_name varchar(50), 
+    p_rol_info varchar(255))
 begin
     update tbl_rol set 
         rol_name = p_rol_name, 
-        rol_info = p_rol_info 
+        rol_info = p_rol_info
     where id_rol = p_id_rol;
 end//
 delimiter ;
 
+-- Eliminar un rol por su ID
 delimiter //
-create procedure sp_delete_rol(p_id_rol int) -- eliminar un rol
+create procedure sp_delete_rol(p_id_rol int)
 begin
     delete from tbl_rol where id_rol = p_id_rol;
 end//
 delimiter ;
 
+-- Obtener un rol por su ID
 delimiter //
-
-create procedure sp_get_rol_by_id( -- obtener un rol por su id
-    in p_id_rol int
-)
+create procedure sp_get_rol_by_id(p_id_rol int)
 begin
-    select *
-    from tbl_rol
-    where id_rol = p_id_rol;
-end //
-
+    select * from tbl_rol where id_rol = p_id_rol;
+end//
 delimiter ;
 
+-- Obtener todos los roles
 delimiter //
-create procedure sp_get_all_rols() -- obtener todos los roles
+create procedure sp_get_all_roles()
 begin
     select * from tbl_rol;
 end//
 delimiter ;
+
+
+
+
+
+
 
 -- procesos almacenados: tabla usuarios
 delimiter //
@@ -146,9 +160,7 @@ create procedure sp_get_user_by_id(
     in p_id_user int
 )
 begin
-    select *
-    from tbl_user
-    where id_user = p_id_user;
+    SELECT * FROM tbl_user WHERE id_user = p_id_user;
 end //
 
 delimiter ;
@@ -156,71 +168,84 @@ delimiter ;
 delimiter //
 create procedure sp_get_all_users()
 begin
-    select * from tbl_user;
+    SELECT u.id_user, u.user_name, u.user_email, u.user_login_name, u.user_password, r.rol_name
+	FROM tbl_user u
+	JOIN tbl_rol r ON u.id_rol = r.id_rol;
 end//
 delimiter ;
+
+
+
+
+
+
+
 
 -- procesos almacenados: tabla empresas
-delimiter //
-create procedure sp_insert_company(
-    p_company_name varchar(50),
-    p_company_type varchar(50),
-    p_company_address varchar(50),
-    p_company_phone varchar(50),
-    p_company_email varchar(50))
-begin
-    insert into tbl_company(company_name, company_type, company_address, company_phone, company_email)
-    values (p_company_name, p_company_type, p_company_address, p_company_phone, p_company_email);
-end//
-delimiter ;
-
-delimiter //
-create procedure sp_update_company(
-    p_id_company int,
-    p_company_name varchar(50),
-    p_company_type varchar(50),
-    p_company_address varchar(50),
-    p_company_phone varchar(50),
-    p_company_email varchar(50))
-begin
-    update tbl_company set 
-        company_name = p_company_name, 
-        company_type = p_company_type, 
-        company_address = p_company_address, 
-        company_phone = p_company_phone, 
-        company_email = p_company_email
-    where id_company = p_id_company;
-end//
-delimiter ;
-
-delimiter //
-create procedure sp_delete_company(p_id_company int)
-begin
-    delete from tbl_company where id_company = p_id_company;
-end//
-delimiter ;
-
-delimiter //
-
-create procedure sp_get_company_by_id(
-    in p_id_company int
+-- Insertar una nueva empresa
+DELIMITER //
+CREATE PROCEDURE sp_insert_company(
+    p_company_name VARCHAR(50),
+    p_company_type VARCHAR(50),
+    p_company_address VARCHAR(50),
+    p_company_phone VARCHAR(50),
+    p_company_email VARCHAR(50)
 )
-begin
-    select *
-    from tbl_company
-    where id_company = p_id_company;
-end //
+BEGIN
+    INSERT INTO tbl_company (company_name, company_type, company_address, company_phone, company_email)
+    VALUES (p_company_name, p_company_type, p_company_address, p_company_phone, p_company_email);
+END //
+DELIMITER ;
 
-delimiter ;
+-- Actualizar una empresa existente
+DELIMITER //
+CREATE PROCEDURE sp_update_company(
+    p_id_company INT,
+    p_company_name VARCHAR(50),
+    p_company_type VARCHAR(50),
+    p_company_address VARCHAR(50),
+    p_company_phone VARCHAR(50),
+    p_company_email VARCHAR(50)
+)
+BEGIN
+    UPDATE tbl_company
+    SET company_name = p_company_name,
+        company_type = p_company_type,
+        company_address = p_company_address,
+        company_phone = p_company_phone,
+        company_email = p_company_email
+    WHERE id_company = p_id_company;
+END //
+DELIMITER ;
 
-delimiter //
-create procedure sp_get_all_companies()
-begin
-    select * from tbl_company;
-end//
-delimiter ;
+-- Eliminar una empresa por su ID
+DELIMITER //
+CREATE PROCEDURE sp_delete_company(p_id_company INT)
+BEGIN
+    DELETE FROM tbl_company WHERE id_company = p_id_company;
+END //
+DELIMITER ;
 
-delimiter //
+-- Obtener una empresa por su ID
+DELIMITER //
+CREATE PROCEDURE sp_get_company_by_id(p_id_company INT)
+BEGIN
+    SELECT * FROM tbl_company WHERE id_company = p_id_company;
+END //
+DELIMITER ;
+
+-- Obtener todas las empresas
+DELIMITER //
+CREATE PROCEDURE sp_get_all_companies()
+BEGIN
+    SELECT * FROM tbl_company;
+END //
+DELIMITER ;
+
+
+
+
+
 
 
 
@@ -307,8 +332,9 @@ insert into tbl_rol (rol_name, rol_info) values
 ('analyst', 'analista de datos'),
 ('guest', 'invitado temporal');
 
+
 insert into tbl_user (user_name, user_email, user_login_name, user_password, id_rol) values 
-('juan pérez', 'juan@mail.com', 'juanp', 'pass123', 1),
+('juan pérez', 'juan@mail.com', 'juanp', '202cb962ac59075b964b07152d234b70', 1),
 ('ana lópez', 'ana@mail.com', 'anal', 'pass456', 2),
 ('carlos ruiz', 'carlos@mail.com', 'carlr', 'pass789', 3),
 ('maría gómez', 'maria@mail.com', 'mariag', 'pass123', 4),
