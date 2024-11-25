@@ -357,6 +357,124 @@ insert into tbl_sell_recipt (sell_type, sell_number, sell_date, sell_amount, sel
 ('factura', 'N° 100004', '2024-11-11', 950.00, 'cliente health plus', null, 4),
 ('boleta', 'N° 100005', '2024-11-13', 2100.75, 'cliente eco green', null, 5);
 
+-- CAMBIOS - SEMANA DEL 25 AL 1 DE DICIEMBRE
+
+delimiter //
+
+create procedure sp_get_buy_recipt_by_company_id( -- Para obtener comprobantes de compra por empresa
+    in p_id_company int
+)
+begin
+    select *
+    from tbl_buy_recipt
+    where id_company = p_id_company;
+end //
+
+delimiter ;
+
+CALL sp_get_buy_recipt_by_company_id(1)
+
+
+delimiter //
+
+create procedure sp_get_sell_recipt_by_company_id( -- Para obtener comprobantes de venta por empresa
+    in p_id_company int
+)
+begin
+    select *
+    from tbl_sell_recipt
+    where id_company = p_id_company;
+end //
+
+delimiter ;
+
+CALL sp_get_sell_recipt_by_company_id(1)
+
+
+-- Para editar comprobantes de compra
+
+delimiter $$
+
+create procedure sp_update_buy_recipt(
+    in p_id_buy_recipt int,
+    in p_buy_type varchar(50),
+    in p_buy_date date,
+    in p_buy_amount decimal(10,2),
+    in p_buy_provider varchar(50),
+    in p_buy_file blob
+)
+begin
+    update tbl_buy_recipt
+    set 
+        buy_type = p_buy_type,
+        buy_date = p_buy_date,
+        buy_amount = p_buy_amount,
+        buy_provider = p_buy_provider,
+        buy_file = p_buy_file
+    where id_buy_recipt = p_id_buy_recipt;
+end$$
+
+delimiter ; 
+
+call sp_update_buy_recipt(1, 'compra local', '2024-11-25', 1500.50, 'proveedor xyz', null);
+
+delimiter $$
+
+create procedure sp_update_sell_recipt(
+    in p_id_sell_recipt int,
+    in p_sell_type varchar(50),
+    in p_sell_date date,
+    in p_sell_amount decimal(10,2),
+    in p_sell_client varchar(50),
+    in p_sell_file blob
+)
+begin
+    update tbl_sell_recipt
+    set 
+        sell_type = p_sell_type,
+        sell_date = p_sell_date,
+        sell_amount = p_sell_amount,
+        sell_client = p_sell_client,
+        sell_file = p_sell_file
+    where id_sell_recipt = p_id_sell_recipt;
+end$$
+
+delimiter ;
+
+call sp_update_sell_recipt(1, 'venta directa', '2024-11-25', 2000.75, 'cliente abc', null);
+
+
+-- Para eliminar comprobantes de compra
+
+delimiter $$
+
+create procedure sp_delete_buy_recipt(
+    in p_id_buy_recipt int
+)
+begin
+    delete from tbl_buy_recipt
+    where id_buy_recipt = p_id_buy_recipt;
+end$$
+
+delimiter ; 
+
+call sp_delete_buy_recipt(1);
+
+-- Para eliminar comprobantes de venta
+
+delimiter $$
+
+create procedure sp_delete_sell_recipt(
+    in p_id_sell_recipt int
+)
+begin
+    delete from tbl_sell_recipt
+    where id_sell_recipt = p_id_sell_recipt;
+end$$
+
+delimiter ; 
+
+call sp_delete_sell_recipt(1);  
 
 
 
