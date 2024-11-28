@@ -476,5 +476,65 @@ delimiter ;
 
 call sp_delete_sell_recipt(1);  
 
+-- cambios - semana del 25 al 1 de diciembre - parte 2
+
+
+delimiter $$
+
+create procedure sp_get_buy_recipt_by_period(
+    in p_company_id int,
+    in p_start_date date,
+    in p_end_date date
+)
+begin
+    select 
+        br.id_buy_recipt,
+        br.buy_type,
+        br.buy_number,
+        br.buy_date,
+        br.buy_amount,
+        br.buy_provider,
+        br.id_company,
+        c.company_name
+    from 
+        tbl_buy_recipt br
+    join 
+        tbl_company c on br.id_company = c.id_company
+    where 
+        c.id_company = p_company_id
+        and br.buy_date between p_start_date and p_end_date;
+end$$
+
+delimiter ; 
+
+
+delimiter $$
+create procedure sp_get_sell_recipt_by_period(
+    in p_company_id int,
+    in p_start_date date,
+    in p_end_date date
+)
+begin
+    select 
+        sr.id_sell_recipt,
+        sr.sell_type,
+        sr.sell_number,
+        sr.sell_date,
+        sr.sell_amount,
+        sr.sell_client,
+        sr.id_company,
+        c.company_name
+    from 
+        tbl_sell_recipt sr
+    join 
+        tbl_company c on sr.id_company = c.id_company
+    where 
+        c.id_company = p_company_id
+        and sr.sell_date between p_start_date and p_end_date;
+end$$
+delimiter ;
+
+CALL sp_get_buy_recipt_by_period(1, '2024-11-01', '2024-11-30');
+CALL sp_get_sell_recipt_by_period(1, '2024-11-01', '2024-11-30');
 
 

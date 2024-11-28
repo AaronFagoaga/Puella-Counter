@@ -24,6 +24,9 @@ if ($_SESSION['userName'] == "") {
     <link rel="stylesheet" href="../../../public/assets/vendors/css/vendor.bundle.base.css">
     <link rel="stylesheet" href="../../../public/assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.css">
     <!-- endinject -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css">
+
     <!-- Plugin css for this page -->
     <link rel="stylesheet" href="../../../public/assets/vendors/datatables.net-bs4/dataTables.bootstrap4.css">
     <link rel="stylesheet" type="text/css" href="../../../public/assets/js/select.dataTables.min.css">
@@ -115,7 +118,14 @@ if ($_SESSION['userName'] == "") {
                             <ul class="nav flex-column sub-menu">
                                 <li class="nav-item"> <a class="nav-link" href="../recipts/companySelector.php">Comprobantes</a></li>
                             </ul>
+                            <ul class="nav flex-column sub-menu">
+                                <li class="nav-item"> <a class="nav-link" href="../reports/report.php?action=buyReports">Reportes de compra</a></li>
+                            </ul>
+                            <ul class="nav flex-column sub-menu">
+                                <li class="nav-item"> <a class="nav-link" href="../reports/report.php?action=sellReports">Reportes de ventas</a></li>
+                            </ul>
                         </div>
+                        
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" data-bs-toggle="collapse" href="#charts" aria-expanded="false" aria-controls="charts">
