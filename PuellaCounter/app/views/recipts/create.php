@@ -32,7 +32,7 @@ $id_company = isset($_GET['id_company']) ? $_GET['id_company'] : null;
 
             <div class="mb-3">
                 <label for="amount" class="form-label">Monto</label>
-                <input type="number" class="form-control" name="amount" id="amount" required>
+                <input type="text" class="form-control" name="amount" id="amount" pattern="^\d+(\.\d{1,2})?$" required title="Ingrese un número válido con hasta 2 decimales.">
             </div>
 
             <div class="mb-3" id="clientField" style="display: none;">
@@ -47,7 +47,7 @@ $id_company = isset($_GET['id_company']) ? $_GET['id_company'] : null;
 
             <div class="mb-3">
                 <label for="file" class="form-label">Archivo</label>
-                <input type="file" class="form-control" name="file" id="file">
+                <input type="file" class="form-control" name="file" id="file" accept=".pdf, .json">
             </div>
 
             <input type="hidden" name="id_company" value="<?= htmlspecialchars($id_company); ?>">

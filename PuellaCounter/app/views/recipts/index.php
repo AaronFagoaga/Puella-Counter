@@ -41,7 +41,11 @@ include '../template/header.php';
                             <td><?= htmlspecialchars($sellRecipt['sell_amount']); ?></td>
                             <td><?= htmlspecialchars($sellRecipt['sell_client']); ?></td>
                             <td>
-                                <a href="uploads/<?= htmlspecialchars($sellRecipt['sell_file']); ?>" class="btn btn-info btn-sm" target="_blank">Ver Archivo</a>
+                                <?php if (in_array(pathinfo($sellRecipt['sell_file'], PATHINFO_EXTENSION), ['pdf', 'json'])): ?>
+                                    <a href="uploads/<?= htmlspecialchars($sellRecipt['sell_file']); ?>" class="btn btn-info btn-sm" target="_blank">Ver Archivo</a>
+                                <?php else: ?>
+                                    <span class="text-danger">Archivo no existente</span>
+                                <?php endif; ?>
                             </td>
                             <td class="text-center">
                             <a href="?action=editSell&id=<?= $sellRecipt['id_sell_recipt'] ?>&id_company=<?= $sellRecipt['id_company'] ?>" class="btn btn-warning btn-sm">Editar</a>
@@ -76,7 +80,11 @@ include '../template/header.php';
                             <td><?= htmlspecialchars($buyRecipt['buy_amount']); ?></td>
                             <td><?= htmlspecialchars($buyRecipt['buy_provider']); ?></td>
                             <td>
-                                <a href="uploads/<?= htmlspecialchars($buyRecipt['buy_file']); ?>" class="btn btn-info btn-sm" target="_blank">Ver Archivo</a>
+                                <?php if (in_array(pathinfo($buyRecipt['buy_file'], PATHINFO_EXTENSION), ['pdf', 'json'])): ?>
+                                    <a href="uploads/<?= htmlspecialchars($buyRecipt['buy_file']); ?>" class="btn btn-info btn-sm" target="_blank">Ver Archivo</a>
+                                <?php else: ?>
+                                    <span class="text-danger">Archivo no existente</span>
+                                <?php endif; ?>
                             </td>
                             <td class="text-center">
                                 <a href="?action=editBuy&id=<?= $buyRecipt['id_buy_recipt'] ?>&id_company=<?= $buyRecipt['id_company'] ?>" class="btn btn-warning btn-sm">Editar</a>
