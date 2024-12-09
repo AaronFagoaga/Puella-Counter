@@ -45,6 +45,12 @@ switch ($action) {
         $controller->store();
             break;
     
+    case 'downloadFile':
+        $type = isset($_GET['type']) ? $_GET['type'] : null;
+        $id = isset($_GET['id']) ? $_GET['id'] : null;
+        $controller->downloadFile($type, $id);
+            break;
+    
        default:
         if ($id_company) {
             $controller->index($id_company);

@@ -35,37 +35,40 @@ class ReciptController
     }
 
     public function store()
-    {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $type = $_POST['type']; 
-            $file = $_FILES['file'];
-    
-            $fileName = time() . "_" . $file['name'];
-            $fileTmpPath = $file['tmp_name'];
-            $fileDestPath = __DIR__ . '/../../uploads/' . $fileName;
-            move_uploaded_file($fileTmpPath, $fileDestPath);
-    
-            if ($type === 'sell') {
-                $this->sellRecipt->sell_type = $_POST['class'];
-                $this->sellRecipt->sell_date = $_POST['date'];
-                $this->sellRecipt->sell_amount = $_POST['amount'];
-                $this->sellRecipt->sell_client = $_POST['client'];
-                $this->sellRecipt->sell_file = $fileName;
-                $this->sellRecipt->id_company = $_POST['id_company'];
-                $this->sellRecipt->create();
-            } elseif ($type === 'buy') {
-                $this->buyRecipt->buy_type = $_POST['class'];
-                $this->buyRecipt->buy_date = $_POST['date'];
-                $this->buyRecipt->buy_amount = $_POST['amount'];
-                $this->buyRecipt->buy_provider = $_POST['provider'];
-                $this->buyRecipt->buy_file = $fileName;
-                $this->buyRecipt->id_company = $_POST['id_company'];
-                $this->buyRecipt->create();
-            }
-    
-            header("Location: recipts.php?id_company=" . $_POST['id_company']);
+{
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $type = $_POST['type']; 
+        $file = $_FILES['file'];
+
+        $allowedTypes = ['application/pdf', 'application/json'];
+        if (!in_array($file['type'], $allowedTypes)) {
+            header("Location: recipts.php?error=invalid_file_type");
+            exit();
         }
+
+        $fileContent = file_get_contents($file['tmp_name']);
+        
+        if ($type === 'sell') {
+            $this->sellRecipt->sell_type = $_POST['class'];
+            $this->sellRecipt->sell_date = $_POST['date'];
+            $this->sellRecipt->sell_amount = $_POST['amount'];
+            $this->sellRecipt->sell_client = $_POST['client'];
+            $this->sellRecipt->sell_file = $fileContent;
+            $this->sellRecipt->id_company = $_POST['id_company'];
+            $this->sellRecipt->create();
+        } elseif ($type === 'buy') {
+            $this->buyRecipt->buy_type = $_POST['class'];
+            $this->buyRecipt->buy_date = $_POST['date'];
+            $this->buyRecipt->buy_amount = $_POST['amount'];
+            $this->buyRecipt->buy_provider = $_POST['provider'];
+            $this->buyRecipt->buy_file = $fileContent; 
+            $this->buyRecipt->id_company = $_POST['id_company'];
+            $this->buyRecipt->create();
+        }
+
+        header("Location: recipts.php?id_company=" . $_POST['id_company']);
     }
+}
 
     public function editSell($id)
     {
@@ -146,6 +149,44 @@ class ReciptController
         $this->sellRecipt->getSellReciptByID();
         $theSellRecipt = $this->sellRecipt;
         include(dirname(__FILE__) . '/../views/recipts/deleteSell.php');
+    }
+    public function downloadFile($type, $id)
+    {
+        try {
+            if ($type === 'buy') {
+                $this->buyRecipt->id_buy_recipt = $id;
+                $fileContent = $this->buyRecipt->getFileContent($id);
+                $fileName = "comprobante_compra_{$id}.pdf";
+            } elseif ($type === 'sell') {
+                $this->sellRecipt->id_sell_recipt = $id;
+                $fileContent = $this->sellRecipt->getFileContent($id);
+                $fileName = "comprobante_venta_{$id}.pdf"; 
+            } else {
+                throw new Exception("Tipo de comprobante inválido");
+            }
+
+            if ($fileContent === false) {
+                throw new Exception("Archivo no encontrado");
+            }
+
+            $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
+            $mimeTypes = [
+                'pdf' => 'application/pdf',
+                'json' => 'application/json'
+            ];
+            $mimeType = $mimeTypes[$fileExtension] ?? 'application/octet-stream';
+
+            header('Content-Type: ' . $mimeType);
+            header('Content-Disposition: attachment; filename="' . $fileName . '"');
+            header('Content-Length: ' . strlen($fileContent));
+
+            echo $fileContent;
+            exit();
+        } catch (Exception $e) {
+            header("HTTP/1.1 404 Not Found");
+            echo "Error: " . $e->getMessage();
+            exit();
+        }
     }
 }
 ?>

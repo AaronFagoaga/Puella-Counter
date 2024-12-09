@@ -21,14 +21,14 @@ class SellReciptModel{
     {
         $query = "CALL sp_insert_sell_recipt(:sell_type, :sell_date, :sell_amount, :sell_client, :sell_file, :id_company);";
         $stmt = $this->conn->prepare($query);
-
         $this->sanitize();
 
+        // Convertir el contenido del archivo a un parámetro binario
         $stmt->bindParam(":sell_type", $this->sell_type);
         $stmt->bindParam(":sell_date", $this->sell_date);
         $stmt->bindParam(":sell_amount", $this->sell_amount);
         $stmt->bindParam(":sell_client", $this->sell_client);
-        $stmt->bindParam(":sell_file", $this->sell_file);
+        $stmt->bindParam(":sell_file", $this->sell_file, PDO::PARAM_LOB);
         $stmt->bindParam(":id_company", $this->id_company);
 
         return $stmt->execute();
@@ -95,6 +95,17 @@ class SellReciptModel{
         return $stmt->execute();
     }
 
+    public function getFileContent($id)
+    {
+        $query = "SELECT sell_file FROM tbl_sell_recipt WHERE id_sell_recipt = :id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+        $stmt->execute();
+        
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        return $result ? $result['sell_file'] : null;
+    }
 
 
     private function sanitize()

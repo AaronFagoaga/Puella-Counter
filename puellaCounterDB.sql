@@ -37,7 +37,7 @@ create table tbl_buy_recipt( -- tabla para almacenar los recibos de compra
 	buy_date date not null,
 	buy_amount decimal(10,2) not null,
 	buy_provider varchar(50) not null,
-	buy_file blob,
+	buy_file longblob,
 	id_company int not null,
 	constraint fk_buy_company foreign key(id_company) references tbl_company(id_company)
 );
@@ -49,7 +49,7 @@ create table tbl_sell_recipt( -- tabla para almacenar los recibos de venta
 	sell_date date not null,
 	sell_amount decimal(10,2) not null,
 	sell_client varchar(50) not null,
-	sell_file blob,
+	sell_file longblob,
 	id_company int not null,
 	constraint fk_sell_company foreign key(id_company) references tbl_company(id_company)
 );
@@ -251,7 +251,7 @@ create procedure sp_insert_buy_recipt(
     p_buy_date date,
     p_buy_amount decimal(10,2),
     p_buy_provider varchar(50),
-    p_buy_file blob,
+    p_buy_file longblob,
     p_id_company int)
 begin
     declare v_buy_number varchar(50);
@@ -288,7 +288,7 @@ create procedure sp_insert_sell_recipt(
     p_sell_date date,
     p_sell_amount decimal(10,2),
     p_sell_client varchar(50),
-    p_sell_file blob,
+    p_sell_file longblob,
     p_id_company int)
 begin
     declare v_sell_number varchar(50);

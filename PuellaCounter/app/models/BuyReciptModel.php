@@ -22,19 +22,18 @@ class BuyReciptModel{
     {
         $query = "CALL sp_insert_buy_recipt(:buy_type, :buy_date, :buy_amount, :buy_provider, :buy_file, :id_company);";
         $stmt = $this->conn->prepare($query);
-
         $this->sanitize();
 
+        // Convertir el contenido del archivo a un parámetro binario
         $stmt->bindParam(":buy_type", $this->buy_type);
         $stmt->bindParam(":buy_date", $this->buy_date);
         $stmt->bindParam(":buy_amount", $this->buy_amount);
         $stmt->bindParam(":buy_provider", $this->buy_provider);
-        $stmt->bindParam(":buy_file", $this->buy_file);
+        $stmt->bindParam(":buy_file", $this->buy_file, PDO::PARAM_LOB);
         $stmt->bindParam(":id_company", $this->id_company);
 
         return $stmt->execute();
     }
-
     public function getBuyRecipts()
     {
         $query = "CALL sp_get_buy_recipt_by_company_id(:id_company);";
@@ -94,6 +93,17 @@ class BuyReciptModel{
         $stmt->bindParam(":id_buy_recipt", $this->id_buy_recipt);
 
         return $stmt->execute();
+    }
+    public function getFileContent($id)
+    {
+        $query = "SELECT buy_file FROM tbl_buy_recipt WHERE id_buy_recipt = :id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+        $stmt->execute();
+        
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        return $result ? $result['buy_file'] : null;
     }
 
     private function sanitize()
