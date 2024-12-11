@@ -1,6 +1,5 @@
 <?php
 include '../template/header.php';
-//require_once(dirname(__FILE__) . "/../../../core/authRol.php");
 ?>
 
 <div class="container">

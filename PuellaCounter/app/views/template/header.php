@@ -1,11 +1,3 @@
-<?php
-session_start();
-if ($_SESSION['userName'] == "") {
-    header("Location: ../../../index.php");
-    exit();
-}
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -94,20 +86,28 @@ if ($_SESSION['userName'] == "") {
                         </a>
                     </li>
                     <li class="nav-item nav-category">Elementos</li>
-                    <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="collapse" href="#tables" aria-expanded="false" aria-controls="tables">
-                            <i class="menu-icon mdi mdi-table"></i>
-                            <span class="menu-title">Tablas</span>
-                            <i class="menu-arrow"></i>
-                        </a>
-                        <div class="collapse" id="tables">
-                            <ul class="nav flex-column sub-menu">
-                                <li class="nav-item"> <a class="nav-link" href="../company/company.php">Empresas</a></li>
-                                <li class="nav-item"> <a class="nav-link" href="../user/user.php">Usuarios</a></li>
-                                <li class="nav-item"> <a class="nav-link" href="../rol/rol.php">Roles</a></li>
-                            </ul>
-                        </div>
-                    </li>
+                    <?php if ($_SESSION["RolID"] == 1): ?>
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="collapse" href="#tables" aria-expanded="false" aria-controls="tables">
+                                <i class="menu-icon mdi mdi-table"></i>
+                                <span class="menu-title">Tablas</span>
+                                <i class="menu-arrow"></i>
+                            </a>
+                            <div class="collapse" id="tables">
+                                <ul class="nav flex-column sub-menu">
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="<?php echo $_SESSION["RolID"] != 1 ? '404' : '../company/company.php'; ?>">Empresas</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="<?php echo $_SESSION["RolID"] != 1 ? '404' : '../user/user.php'; ?>">Usuarios</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="<?php echo $_SESSION["RolID"] != 1 ? '404' : '../rol/rol.php'; ?>">Roles</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    <?php endif; ?>
                     <li class="nav-item">
                         <a class="nav-link" data-bs-toggle="collapse" href="#icons" aria-expanded="false" aria-controls="icons">
                             <i class="menu-icon mdi mdi-file-document"></i>
@@ -125,7 +125,7 @@ if ($_SESSION['userName'] == "") {
                                 <li class="nav-item"> <a class="nav-link" href="../reports/report.php?action=sellReports">Reportes de ventas</a></li>
                             </ul>
                         </div>
-                        
+
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" data-bs-toggle="collapse" href="#charts" aria-expanded="false" aria-controls="charts">

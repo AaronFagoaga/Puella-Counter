@@ -1,4 +1,10 @@
 <?php
+session_start();
+if ($_SESSION['userName'] == "") {
+    header("Location: ../../../index.php");
+    exit();
+}
+
 include '../template/header.php';
 require_once(dirname(__FILE__) . "/../../../config/config.php");
 require_once(dirname(__FILE__) . "/../../../core/database.php");

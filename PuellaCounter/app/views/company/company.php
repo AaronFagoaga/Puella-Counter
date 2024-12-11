@@ -1,4 +1,10 @@
 <?php
+session_start();
+if ($_SESSION['userName'] == "" || $_SESSION["RolID"] != 1) {
+    header("Location: ../../../index.php");
+    exit();
+}
+
 require_once __DIR__ . '/../../../app/controllers/CompanyController.php';
 
 $action = isset($_GET['action']) ? $_GET['action'] : '';

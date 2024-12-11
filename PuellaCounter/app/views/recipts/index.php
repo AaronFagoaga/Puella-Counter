@@ -1,4 +1,10 @@
 <?php
+session_start();
+if ($_SESSION['userName'] == "") {
+    header("Location: ../../../index.php");
+    exit();
+}
+
 include '../template/header.php';
     $id_company = isset($_GET['id_company']) ? $_GET['id_company'] : null;
 ?>
